@@ -12,6 +12,8 @@
     {
         <label>Filter by category:</label>
         @Html.DropDownListFor(viewModel => viewModel.Category, Model.CategoryFilterItems, "All");
+        <label>Sort by:</label>
+        @Html.DropDownListFor(viewModel=>viewModel.SortBy,new SelectList(Model.Sorts,"Value","Key"),"Default")
         <input type="submit" value="Filter"/>
         <input type="hidden" name="Search" id="Search" value="@Model.Search"/>
     }

@@ -17,7 +17,7 @@ namespace AspnetSmallStore.Controllers
         private StoreContext db = new StoreContext();
 
         // GET: Products
-        public ActionResult Index(string category, string search)
+        public ActionResult Index(string category, string search, string sortBy)
         {
             ProductIndexViewModel viewModel = new ProductIndexViewModel();
 
@@ -43,7 +43,28 @@ namespace AspnetSmallStore.Controllers
                                               CategoryName = categoryGroup.Key,
                                               ProductCount = categoryGroup.Count()
                                           };
+            //sort the result by price
+            if (!String.IsNullOrEmpty(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "price_lowest":
+                        products = products.OrderBy(p => p.Price);
+                        break;
+                    case "price_highest":
+                        products = products.OrderByDescending(p => p.Price);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             viewModel.Products = products;
+            viewModel.Sorts = new Dictionary<string, string>
+            {
+                {"Price low to high","price_lowest" },
+                {"Price high to low","price_highest" }
+            };
             return View(viewModel);
         }
 
